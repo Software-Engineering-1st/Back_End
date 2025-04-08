@@ -1,6 +1,7 @@
 package com.se.dandan.dto;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,4 +16,11 @@ public class TokenInfo {
     private String refreshToken;
 
     private String role;
+
+    @Builder
+    public TokenInfo(String grantType, String accessToken, String role) {
+        this.grantType = grantType;
+        this.accessToken = accessToken;
+        this.role = role;
+    }
 }
