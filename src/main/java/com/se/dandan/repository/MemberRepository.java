@@ -1,4 +1,8 @@
 package com.se.dandan.repository;
 
-public interface MemberRepository {
+import com.se.dandan.entity.Member;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface MemberRepository extends JpaRepository<Member, Long> {
+    Member findByNickname(String nickname);
 }
