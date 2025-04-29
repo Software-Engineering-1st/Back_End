@@ -20,4 +20,7 @@ public class SignUpRequestDTO {
 
     private String checkPassword;
 
+    @NotBlank
+    private int wordCount;
+
 }
