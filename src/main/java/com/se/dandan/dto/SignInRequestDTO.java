@@ -7,7 +7,7 @@ import lombok.Data;
 public class SignInRequestDTO {
 
     @NotBlank
-    private String nickname;
+    private String userId;
 
     @NotBlank
     private String password;
