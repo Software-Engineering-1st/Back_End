@@ -1,6 +1,7 @@
 package com.se.dandan.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
@@ -20,7 +21,7 @@ public class SignUpRequestDTO {
 
     private String checkPassword;
 
-    @NotBlank
+    @NotNull
     private int wordCount;
 
 }
