@@ -1,7 +1,32 @@
 package com.se.dandan.service;
 
+import com.se.dandan.dto.IdCheckRequestDTO;
+import com.se.dandan.dto.SignUpRequestDTO;
+import com.se.dandan.entity.Member;
+import com.se.dandan.exception.CustomException;
+import com.se.dandan.exception.ErrorCode;
+import com.se.dandan.repository.MemberRepository;
+import com.se.dandan.util.JWTProvider;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
+
+    private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JWTProvider jwtProvider;
+
+    public AuthService(MemberRepository memberRepository, BCryptPasswordEncoder bCryptPasswordEncoder, JWTProvider jwtProvider) {
+        this.memberRepository = memberRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.jwtProvider = jwtProvider;
+    }
+
+    public void idCheck(IdCheckRequestDTO idCheckRequestDTO) {
+        boolean existedUserId = memberRepository.existsByUserId(idCheckRequestDTO.getUserId());
+        if (existedUserId) {
+            throw new CustomException(ErrorCode.DUPLICATED_ID);
+        }
+    }
 }
