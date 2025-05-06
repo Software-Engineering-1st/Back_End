@@ -38,3 +38,6 @@ out/
 src/main/resources/application-dev.yml
 
 .DS_Store
+._.DS_Store
+**/.DS_Store
+**/._.DS_Store
