@@ -44,12 +44,12 @@ public class JWTProvider {
         this.memberRepository = memberRepository;
     }
 
-    public String generateAccessToken(String nickname, String role) {
+    public String generateAccessToken(String userId, String role) {
         Date now = new Date();
         Date accessTokenExpiredAt = new Date(now.getTime() + expiredMs);
 
         return Jwts.builder()
-                .subject(nickname)
+                .subject(userId)
                 .claim("role", role)
                 .issuedAt(now)
                 .expiration(accessTokenExpiredAt)
@@ -57,12 +57,12 @@ public class JWTProvider {
                 .compact();
     }
 
-    public String generateRefreshToken(String nickname, String role) {
+    public String generateRefreshToken(String userId, String role) {
         Date now = new Date();
         Date refreshTokenExpiredAt = new Date(now.getTime() + refreshedMs);
 
         return Jwts.builder()
-                .subject(nickname)
+                .subject(userId)
                 .claim("role", role)
                 .issuedAt(now)
                 .expiration(refreshTokenExpiredAt)
@@ -94,9 +94,9 @@ public class JWTProvider {
         return false;
     }
 
-    public TokenInfo generateToken(String nickname, String role) {
+    public TokenInfo generateToken(String userId, String role) {
 
-        String accessToken = generateAccessToken(nickname, role);
+        String accessToken = generateAccessToken(userId, role);
 
         return TokenInfo.builder()
                 .grantType("Bearer")
@@ -108,18 +108,15 @@ public class JWTProvider {
     public Authentication getAuthentication(String token) {
         Claims claims = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
 
-        String nickname = claims.getSubject();
+        String userId = claims.getSubject();
 
         String role = claims.get("role", String.class);
 
-        Member member = memberRepository.findByNickname(nickname);
-
-        if (member == null) {
-            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
-        }
+        Member member = memberRepository.findByUserId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
 
-        return new UsernamePasswordAuthenticationToken(nickname, token, authorities);
+        return new UsernamePasswordAuthenticationToken(userId, token, authorities);
     }
 }
