@@ -88,12 +88,10 @@ public class AuthService {
             throw new CustomException(ErrorCode.SIGN_IN_FAILED);
         }
 
-        String nickname = member.getNickname();
-
         String role = member.getRole().name();
 
-        TokenInfo token = jwtProvider.generateToken(nickname, role);
-        String refreshToken = jwtProvider.generateRefreshToken(nickname, role);
+        TokenInfo token = jwtProvider.generateToken(userId, role);
+        String refreshToken = jwtProvider.generateRefreshToken(userId, role);
 
         response.addCookie(createCookie(refreshToken));
 
