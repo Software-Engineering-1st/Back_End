@@ -77,10 +77,8 @@ public class AuthService {
     public TokenInfo signIn(SignInRequestDTO signInRequestDTO, HttpServletResponse response) {
         String userId = signInRequestDTO.getUserId();
 
-        Member member = memberRepository.findByUserId(userId);
-        if(member == null) {
-            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
-        }
+        Member member = memberRepository.findByUserId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         String password = signInRequestDTO.getPassword();
         String encodedPassword = member.getPassword();
