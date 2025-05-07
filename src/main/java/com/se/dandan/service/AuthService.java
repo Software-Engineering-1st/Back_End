@@ -77,10 +77,8 @@ public class AuthService {
     public TokenInfo signIn(SignInRequestDTO signInRequestDTO, HttpServletResponse response) {
         String userId = signInRequestDTO.getUserId();
 
-        Member member = memberRepository.findByUserId(userId);
-        if(member == null) {
-            throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
-        }
+        Member member = memberRepository.findByUserId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         String password = signInRequestDTO.getPassword();
         String encodedPassword = member.getPassword();
@@ -90,12 +88,10 @@ public class AuthService {
             throw new CustomException(ErrorCode.SIGN_IN_FAILED);
         }
 
-        String nickname = member.getNickname();
-
         String role = member.getRole().name();
 
-        TokenInfo token = jwtProvider.generateToken(nickname, role);
-        String refreshToken = jwtProvider.generateRefreshToken(nickname, role);
+        TokenInfo token = jwtProvider.generateToken(userId, role);
+        String refreshToken = jwtProvider.generateRefreshToken(userId, role);
 
         response.addCookie(createCookie(refreshToken));
 
