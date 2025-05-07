@@ -1,5 +1,6 @@
 package com.se.dandan.util;
 
+import com.se.dandan.dto.MemberPrincipalDTO;
 import com.se.dandan.dto.TokenInfo;
 import com.se.dandan.entity.Member;
 import com.se.dandan.exception.CustomException;
@@ -117,6 +118,11 @@ public class JWTProvider {
 
         List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role));
 
-        return new UsernamePasswordAuthenticationToken(userId, token, authorities);
+        MemberPrincipalDTO memberPrincipalDTO = MemberPrincipalDTO.builder()
+                .id(member.getId())
+                .nickname(member.getNickname())
+                .build();
+
+        return new UsernamePasswordAuthenticationToken(memberPrincipalDTO, token, authorities);
     }
 }
