@@ -6,9 +6,7 @@ import com.se.dandan.dto.common.ResponseTemplate;
 import com.se.dandan.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/member")
@@ -26,5 +24,14 @@ public class MemberController {
         MemberInfoDTO memberInfo = memberService.loadMemberInfo(userId);
 
         return new ResponseTemplate<>(HttpStatus.OK, "회원 정보 조회 성공", memberInfo);
+    }
+
+    @PostMapping("/my-page/edit")
+    public ResponseTemplate<?> editMemberInfo(@AuthenticationPrincipal MemberPrincipalDTO memberPrincipalDTO,
+                                              @RequestBody MemberInfoDTO memberInfoDTO) {
+        String userId = memberPrincipalDTO.getUserId();
+        memberService.updateMemberInfo(userId, memberInfoDTO);
+
+        return new ResponseTemplate<>(HttpStatus.OK, "회원정보 수정 성공");
     }
 }
