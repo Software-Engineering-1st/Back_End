@@ -121,6 +121,7 @@ public class JWTProvider {
         MemberPrincipalDTO memberPrincipalDTO = MemberPrincipalDTO.builder()
                 .id(member.getId())
                 .nickname(member.getNickname())
+                .userId(member.getUserId())
                 .build();
 
         return new UsernamePasswordAuthenticationToken(memberPrincipalDTO, token, authorities);
