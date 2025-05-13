@@ -23,17 +23,6 @@ public class MemberService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public MemberInfoDTO loadMemberInfo(String userId) {
-        Member member = memberRepository.findByUserId(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
-
-        return MemberInfoDTO.builder()
-                .nickname(member.getNickname())
-                .userId(member.getUserId())
-                .password(bCryptPasswordEncoder.encode(member.getPassword()))
-                .build();
-    }
-
     public void updateMemberInfo(String userId, MemberInfoDTO memberInfoDTO) {
         Member member = memberRepository.findByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
@@ -46,7 +35,7 @@ public class MemberService {
             String password = info.getPassword();
 
             if(nickname != null) {
-                if(nickname.length() < 4 || nickname.length() > 6) {
+                if(!nickname.matches("^(?!\\d+$)[a-zA-Z0-9가-힣]+$")) {
                     throw new CustomException(ErrorCode.VALIDATION_FAIL);
                 }
                 member.setNickname(nickname);

@@ -18,12 +18,18 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @GetMapping("/my-page")
-    public ResponseTemplate<MemberInfoDTO> memberInfo(@AuthenticationPrincipal MemberPrincipalDTO memberPrincipalDTO) {
-        String userId = memberPrincipalDTO.getUserId();
-        MemberInfoDTO memberInfo = memberService.loadMemberInfo(userId);
+    @GetMapping("/my-page/get-nickname")
+    public ResponseTemplate<String> getNickname(@AuthenticationPrincipal MemberPrincipalDTO memberPrincipalDTO) {
+        String nickname = memberPrincipalDTO.getNickname();
 
-        return new ResponseTemplate<>(HttpStatus.OK, "회원 정보 조회 성공", memberInfo);
+        return new ResponseTemplate<>(HttpStatus.OK, "회원 닉네임 조회 성공", nickname);
+    }
+
+    @GetMapping("/my-page/get-userId")
+    public ResponseTemplate<String> getUserId(@AuthenticationPrincipal MemberPrincipalDTO memberPrincipalDTO) {
+        String userId = memberPrincipalDTO.getUserId();
+
+        return new ResponseTemplate<>(HttpStatus.OK, "회원 아이디 조회 성공", userId);
     }
 
     @PostMapping("/my-page/edit")
