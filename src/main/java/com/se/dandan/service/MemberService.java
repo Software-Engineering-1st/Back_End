@@ -1,6 +1,7 @@
 package com.se.dandan.service;
 
 import com.se.dandan.dto.MemberInfoDTO;
+import com.se.dandan.dto.WordCountDTO;
 import com.se.dandan.entity.Member;
 import com.se.dandan.exception.CustomException;
 import com.se.dandan.exception.ErrorCode;
@@ -21,6 +22,27 @@ public class MemberService {
     public MemberService(MemberRepository memberRepository,  BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.memberRepository = memberRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
+
+    public int getWordCount(String userId) {
+        Member member = memberRepository.findByUserId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        return member.getWordCount();
+    }
+
+    public void updateWordCount(String userId, WordCountDTO wordCountDTO) {
+        Member member = memberRepository.findByUserId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        int wordCount = wordCountDTO.getWordCount();
+
+        if(wordCount <= 0) {
+            throw new CustomException(ErrorCode.VALIDATION_FAIL);
+        }
+
+        member.setWordCount(wordCount);
+        memberRepository.save(member);
     }
 
     public void updateMemberInfo(String userId, MemberInfoDTO memberInfoDTO) {
