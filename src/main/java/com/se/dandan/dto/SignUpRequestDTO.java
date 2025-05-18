@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class SignUpRequestDTO {
 
-    @Schema(description = "사용자 이름", example = "홍길동")
+    @Schema(description = "사용자 이름", example = "소공에이")
     @NotBlank
     @Size(min = 4, max = 6, message = "닉네임은 4자 이상 6자 이하로 입력해주세요.")
     @Pattern(
