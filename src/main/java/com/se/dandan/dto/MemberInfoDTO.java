@@ -9,7 +9,5 @@ public class MemberInfoDTO {
 
     private String nickname;
 
-    private String userId;
-
     private String password;
 }
