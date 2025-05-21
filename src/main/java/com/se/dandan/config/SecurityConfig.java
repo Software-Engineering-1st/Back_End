@@ -33,7 +33,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**")); // csrf 비활성화
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
+        http
+                .csrf(AbstractHttpConfigurer::disable);// csrf 비활성화
 
         http
                 .httpBasic(AbstractHttpConfigurer::disable); // httpBasic 비활성화
