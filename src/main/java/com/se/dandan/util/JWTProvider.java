@@ -122,6 +122,7 @@ public class JWTProvider {
                 .id(member.getId())
                 .nickname(member.getNickname())
                 .userId(member.getUserId())
+                .wordCount(member.getWordCount())
                 .build();
 
         return new UsernamePasswordAuthenticationToken(memberPrincipalDTO, token, authorities);
