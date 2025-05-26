@@ -22,9 +22,7 @@ public class BlacklistedToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String refreshToken;
-
-    private String userId;
+    private String token;
 
     private LocalDateTime expiration;
 }
