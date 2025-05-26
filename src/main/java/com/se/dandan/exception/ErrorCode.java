@@ -19,6 +19,9 @@ public enum ErrorCode {
     // 로그아웃 관련
     ALREADY_SIGN_OUT(HttpStatus.UNAUTHORIZED, "로그아웃된 토큰 입니다."),
 
+    // 관리자 권한 관련
+    NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "권한이 없습니다."),
+
     // 단어장 관련
     WORD_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 단어가 존재하지 않습니다."),
     WORDBOOK_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 단어 학습 정보가 없습니다."),
