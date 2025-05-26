@@ -16,6 +16,10 @@ public enum ErrorCode {
     NOT_MATCHED_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다"),
     SIGN_IN_FAILED(HttpStatus.UNAUTHORIZED, "아이디 또는 비밀번호가 잘못되었습니다."),
 
+    // 단어장 관련
+    WORD_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 단어가 존재하지 않습니다."),
+    WORDBOOK_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 단어 학습 정보가 없습니다."),
+
     // 서버 에러
     DATABASE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 에러"),
 

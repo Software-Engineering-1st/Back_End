@@ -17,4 +17,7 @@ public class MemberPrincipalDTO {
 
     @Schema(description = "사용자 아이디")
     private String userId;
+
+    @Schema(description = "목표 단어 개수")
+    private int wordCount;
 }
