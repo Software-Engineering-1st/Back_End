@@ -13,10 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Auth API", description = "회원가입 및 로그인 API")
 @RestController
@@ -58,5 +55,16 @@ public class AuthController {
         TokenInfo token = authService.signIn(signInRequestDTO, response);
 
         return new ResponseTemplate<>(HttpStatus.OK, "로그인 성공", token);
+    }
+
+    @Operation(summary = "로그아웃 컨트롤러", description = "로그아웃을 요청하는 컨트롤러 입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공"),
+    })
+    @PostMapping("/sign-out")
+    public ResponseTemplate<Void> logout(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.substring(7);
+        authService.signOut(token);
+        return new ResponseTemplate<>(HttpStatus.OK, "로그아웃 성공");
     }
 }
