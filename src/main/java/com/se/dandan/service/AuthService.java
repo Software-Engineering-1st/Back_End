@@ -109,4 +109,9 @@ public class AuthService {
 
         return cookie;
     }
+
+    public void signOut(String token) {
+        long expiration = jwtProvider.getExpiration(token);
+        tokenBlacklistService.blacklistToken(token,  expiration);
+    }
 }
