@@ -1,6 +1,7 @@
 package com.se.dandan.controller;
 
 import com.se.dandan.dto.MemberPrincipalDTO;
+import com.se.dandan.dto.WordDTO;
 import com.se.dandan.dto.common.ResponseTemplate;
 import com.se.dandan.entity.Word;
 import com.se.dandan.service.ExampleService;
@@ -8,8 +9,10 @@ import com.se.dandan.service.WordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,5 +62,45 @@ public class WordController {
         Long memberId = memberPrincipalDTO.getId();
         wordService.markedMemorized(memberId, wordId);
         return new ResponseTemplate<>(HttpStatus.OK, "학습 완료");
+    }
+
+    @Operation(summary = "관리자 단어 생성 컨트롤러", description = "관리자 단어 생성을 요청하는 컨트롤러 입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공"),
+    })
+    @PostMapping("/create")
+    public ResponseTemplate<Word> create(@RequestBody WordDTO wordDTO) {
+        Word word = wordService.createWord(wordDTO);
+        return new ResponseTemplate<>(HttpStatus.OK, "단어 생성 성공", word);
+    }
+
+    @Operation(summary = "관리자 단어 조회 컨트롤러", description = "관리자 단어 리스트 조회를 요청하는 컨트롤러 입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공"),
+    })
+    @GetMapping("/list")
+    public ResponseTemplate<Page<Word>> getList(@RequestParam(value = "page") int page) {
+        Page<Word> list = wordService.getList(page);
+        return new ResponseTemplate<>(HttpStatus.OK, "단어 리스트 조회 성공", list);
+    }
+
+    @Operation(summary = "관리자 단어 수정 컨트롤러", description = "관리자 단어 수정을 요청하는 컨트롤러 입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공"),
+    })
+    @PatchMapping("/edit/{wordId}")
+    public ResponseTemplate<Void> editWord(@PathVariable Long wordId, @RequestBody WordDTO wordDTO) {
+        wordService.updateWord(wordId, wordDTO);
+        return new ResponseTemplate<>(HttpStatus.OK, "단어 수정 성공");
+    }
+
+    @Operation(summary = "관리자 단어 삭제 컨트롤러", description = "관리자 단어 삭제를 요청하는 컨트롤러 입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "성공"),
+    })
+    @DeleteMapping("/delete/{wordId}")
+    public ResponseTemplate<Void> deleteWord(@PathVariable Long wordId) {
+        wordService.deleteWord(wordId);
+        return new ResponseTemplate<>(HttpStatus.OK, "단어 삭제 성공");
     }
 }
