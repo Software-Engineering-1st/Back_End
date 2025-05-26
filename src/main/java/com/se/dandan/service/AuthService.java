@@ -22,15 +22,18 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JWTProvider jwtProvider;
-    private final int refreshedMS;
+    private final TokenBlacklistService tokenBlacklistService;
+    private final long refreshedMS;
 
     public AuthService(MemberRepository memberRepository,
                        BCryptPasswordEncoder bCryptPasswordEncoder,
                        JWTProvider jwtProvider,
-                       @Value("${jwt.refreshedMs}") int refreshedMS) {
+                       TokenBlacklistService tokenBlacklistService,
+                       @Value("${jwt.refreshedMs}") long refreshedMS) {
         this.memberRepository = memberRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.jwtProvider = jwtProvider;
+        this.tokenBlacklistService = tokenBlacklistService;
         this.refreshedMS = refreshedMS;
     }
 
@@ -100,10 +103,15 @@ public class AuthService {
 
     private Cookie createCookie(String value) {
         Cookie cookie = new Cookie("Refresh", value);
-        cookie.setMaxAge(refreshedMS / 1000);
+        cookie.setMaxAge((int)refreshedMS / 1000);
         cookie.setSecure(true);
         cookie.setHttpOnly(true);
 
         return cookie;
+    }
+
+    public void signOut(String token) {
+        long expiration = jwtProvider.getExpiration(token);
+        tokenBlacklistService.blacklistToken(token,  expiration);
     }
 }

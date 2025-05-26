@@ -19,6 +19,8 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -126,5 +128,17 @@ public class JWTProvider {
                 .build();
 
         return new UsernamePasswordAuthenticationToken(memberPrincipalDTO, token, authorities);
+    }
+
+    public long getExpiration(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+
+        Date expiration = claims.getExpiration();
+
+        return expiration.getTime() - System.currentTimeMillis();
     }
 }
