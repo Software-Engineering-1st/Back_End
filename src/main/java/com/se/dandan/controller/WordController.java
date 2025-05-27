@@ -9,6 +9,7 @@ import com.se.dandan.service.WordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -69,7 +70,7 @@ public class WordController {
             @ApiResponse(responseCode = "200", description = "성공"),
     })
     @PostMapping("/create")
-    public ResponseTemplate<Word> create(@RequestBody WordDTO wordDTO) {
+    public ResponseTemplate<Word> create(@Valid @RequestBody WordDTO wordDTO) {
         Word word = wordService.createWord(wordDTO);
         return new ResponseTemplate<>(HttpStatus.OK, "단어 생성 성공", word);
     }
@@ -89,7 +90,7 @@ public class WordController {
             @ApiResponse(responseCode = "200", description = "성공"),
     })
     @PatchMapping("/edit/{wordId}")
-    public ResponseTemplate<Void> editWord(@PathVariable Long wordId, @RequestBody WordDTO wordDTO) {
+    public ResponseTemplate<Void> editWord(@PathVariable Long wordId, @Valid @RequestBody WordDTO wordDTO) {
         wordService.updateWord(wordId, wordDTO);
         return new ResponseTemplate<>(HttpStatus.OK, "단어 수정 성공");
     }
