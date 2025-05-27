@@ -11,4 +11,6 @@ import java.util.List;
 public interface WordBookRepository extends JpaRepository<WordBook, Long> {
 
     List<WordBook> findByMemberId(Long memberId);
+
+    List<WordBook> findByMemberIdAndIsMemorizedTrue(Long memberId);
 }
