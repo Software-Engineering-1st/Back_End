@@ -1,10 +1,7 @@
 package com.se.dandan.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Schema(description = "회원가입 DTO")
@@ -37,6 +34,7 @@ public class SignUpRequestDTO {
 
     @Schema(description = "목표 단어 개수 설정", example = "5")
     @NotNull
+    @Min(value = 1)
     private int wordCount;
 
 }
